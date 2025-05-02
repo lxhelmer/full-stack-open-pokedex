@@ -47,11 +47,5 @@ jobs:
     needs: [checks, e2e-test]
     if: ${{ needs.checks.result == 'success' && needs.e2e-test.result == 'success' }}
     steps:
-      - name: Wait for Render Deployment
-        uses: bounceapp/render-action@0.8.0
-        with:
-          render-token: token-test-test-test
-          service-id: srv-d0ak31p5pdvs73bqf4kg/deploys/dep-d0ak6hqdbo4c7382ci80
-          retries: 20
-          wait: 16000
-          sleep: 30000
+    - name: Trigger deployment
+      run: curl https://api.render.com/deploy/srv-${{ secrets.SRV_ID }}?key=${{ secrets.API_KEY }}
