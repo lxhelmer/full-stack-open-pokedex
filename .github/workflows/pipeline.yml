@@ -54,7 +54,7 @@ jobs:
   tag_release:
     needs: [deploy]
     if: ${{ github.event_name == 'push'}}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v4
       with:
