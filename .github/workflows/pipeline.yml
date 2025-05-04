@@ -49,13 +49,13 @@ jobs:
     name: Deploy to Render
     runs-on: ubuntu-latest
     needs: [checks, e2e-test]
-    if: ${{ needs.checks.result == 'success' && needs.e2e-test.result == 'success' && github.event_name == 'push' && env.SKIP != 'true'}}
+    if: ${{ needs.checks.result == 'success' && needs.e2e-test.result == 'success' && github.event_name == 'push' && github.env.SKIP != 'true'}}
     steps:
     - name: Trigger deployment
       run: curl https://api.render.com/deploy/srv-${{ secrets.SRV_ID }}?key=${{ secrets.API_KEY }}
   tag_release:
     needs: [deploy]
-    if: ${{ github.event_name == 'push' && env.SKIP != 'true'}}
+    if: ${{ github.event_name == 'push' && github.env.SKIP != 'true'}}
     runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v4
