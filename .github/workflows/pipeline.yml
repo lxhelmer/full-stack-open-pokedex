@@ -26,8 +26,6 @@ jobs:
       - name: Test
         run: npm run test
       - name: Test Failure
-        env:
-          COMMIT_LINKS: ${{ join(github.event.commits.*.url, ', ')}}
         uses: rjstone/discord-webhook-notify@v1
         if: ${{ failure() }}
         with:
@@ -60,6 +58,8 @@ jobs:
     needs: [checks, e2e-test]
     if: ${{ needs.checks.result == 'success' && needs.e2e-test.result == 'success' && github.event_name == 'push' && github.env.SKIP == 'false'}}
     steps:
+    - name: test env
+      run: echo ${{ github.env.SKIP }}
     - name: commit messages
       run: echo "env.SKIP"
     - name: Trigger deployment
@@ -89,6 +89,8 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
+      - name: test env
+        run: echo ${{ github.env.SKIP }}
       - name: commit messages
         env:
           SKIP: ${{ contains(join(github.event.commits.*.message, ', '), '#skip' ) }}
