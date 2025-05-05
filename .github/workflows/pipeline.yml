@@ -25,6 +25,15 @@ jobs:
         run: npm run build
       - name: Test
         run: npm run test
+      - name: Test Failure
+        env:
+          COMMIT_LINKS: ${{ join(github.event.commits.*.url, ', ')}}
+        uses: rjstone/discord-webhook-notify@v1
+        if: ${{ failure() }}
+        with:
+            severity: error
+            details: Build failed!
+            webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
   e2e-test:
       timeout-minutes: 60
       runs-on: ubuntu-latest
@@ -55,6 +64,13 @@ jobs:
       run: echo "env.SKIP"
     - name: Trigger deployment
       run: curl https://api.render.com/deploy/srv-${{ secrets.SRV_ID }}?key=${{ secrets.API_KEY }}
+    - name: Test Success
+      uses: rjstone/discord-webhook-notify@v1
+      if: ${{ success() }}
+      with:
+          severity: info
+          details: Test Succeeded!
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
   tag_release:
     needs: [deploy]
     if: ${{ github.event_name == 'push' && github.env.SKIP == 'false'}}
@@ -83,5 +99,5 @@ jobs:
         run: echo "$COMMITS"
       - name: commit messages
         env:
-          COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
+          COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.url) }}
         run: echo "$COMMIT_MESSAGES"
