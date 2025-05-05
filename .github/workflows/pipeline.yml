@@ -61,7 +61,7 @@ jobs:
     if: ${{ needs.checks.result == 'success' && needs.e2e-test.result == 'success' && github.event_name == 'push'}}
     steps:
     - name: Trigger deployment
-    - if: ${{ env.SKIP == false }}
+      if: ${{ env.SKIP == false }}
       run: curl https://api.render.com/deploy/srv-${{ secrets.SRV_ID }}?key=${{ secrets.API_KEY }}
     - name: Test Success
       uses: rjstone/discord-webhook-notify@v1
