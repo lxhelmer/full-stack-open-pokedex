@@ -56,7 +56,7 @@ jobs:
           retention-days: 30
   deploy:
     name: Deploy to Render
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs: [checks, e2e-test]
     if: ${{ needs.checks.result == 'success' && needs.e2e-test.result == 'success' && github.event_name == 'push'}}
     steps:
@@ -68,7 +68,7 @@ jobs:
       if: ${{ success() }}
       with:
           severity: info
-          details: Test Succeeded!
+          details: New deployment live!
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
   tag_release:
     needs: [deploy]
