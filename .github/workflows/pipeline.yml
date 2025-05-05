@@ -17,6 +17,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+      - name: test env
+        run: echo '$SKIP'
       - name: Install dependencies 
         run: npm install  
       - name: Check style        
@@ -89,8 +91,6 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-      - name: test env
-        run: echo ${{ github.env.SKIP }}
       - name: commit messages
         env:
           SKIP: ${{ contains(join(github.event.commits.*.message, ', '), '#skip' ) }}
