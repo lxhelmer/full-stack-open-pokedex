@@ -27,13 +27,16 @@ jobs:
         run: npm run build
       - name: Test
         run: npm run test
-      - name: Test Failure
-        uses: rjstone/discord-webhook-notify@v1
+      - name: Discord notify test failure
+        uses: stegzilla/discord-notify@v2
         if: ${{ failure() }}
         with:
-            severity: error
-            details: Build failed!
-            webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
+          title: The latest build failed! :(
+          message: "**${{ github.event.pull_request.title }}**\n**Creator:** ${{ github.event.pull_request.user.login }}\n${{ github.event.pull_request.html_url }}"
+          include_image: true
+          avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
+          username: GitHub PR Notifier
   e2e-test:
       timeout-minutes: 60
       runs-on: ubuntu-latest
@@ -63,13 +66,16 @@ jobs:
     - name: Trigger deployment
       if: ${{ env.SKIP == false }}
       run: curl https://api.render.com/deploy/srv-${{ secrets.SRV_ID }}?key=${{ secrets.API_KEY }}
-    - name: Test Success
-      uses: rjstone/discord-webhook-notify@v1
+    - name: Send Discord notification
+      uses: stegzilla/discord-notify@v2
       if: ${{ success() }}
       with:
-          severity: info
-          details: New deployment live!
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+        webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
+        title: New Deployment live!
+        message: "**${{ github.event.pull_request.title }}**\n**Creator:** ${{ github.event.pull_request.user.login }}\n${{ github.event.pull_request.html_url }}"
+        include_image: true
+        avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
+        username: GitHub PR Notifier
   tag_release:
     needs: [deploy]
     if: ${{ github.event_name == 'push'}}
