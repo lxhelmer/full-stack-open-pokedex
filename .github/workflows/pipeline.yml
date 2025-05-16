@@ -94,7 +94,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: pr info
-        run: echo "${{github.event.pull_request}}
+        run: echo "${{github.event.pull_request}}"
       - name: commit messages
         env:
           SKIP: ${{ contains(join(github.event.commits.*.message, ', '), '#skip' ) }}
