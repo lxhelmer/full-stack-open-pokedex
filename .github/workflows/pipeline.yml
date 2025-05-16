@@ -93,7 +93,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-      - name: pr info
+      - name: pr
         env:
           PR: ${{github.event.pull_request}}
         run: echo "$PR"
