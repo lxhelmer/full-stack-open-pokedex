@@ -93,10 +93,6 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-      - name: pr
-        env:
-          PR: ${{github.event.pull_request}}
-        run: echo "$PR"
       - name: commit messages
         env:
           SKIP: ${{ contains(join(github.event.commits.*.message, ', '), '#skip' ) }}
