@@ -33,7 +33,7 @@ jobs:
         with:
           discord_webhook: ${{ secrets.DISCORD_WEBHOOK }}
           title: "Latest build failed :( ❌"
-          description: "Build failed, something needs fixing!"
+          description: "Build failed, check the commit for more info!"
   e2e-test:
       timeout-minutes: 60
       runs-on: ubuntu-latest
