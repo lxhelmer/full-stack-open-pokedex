@@ -69,7 +69,7 @@ jobs:
       with:
         discord_webhook: ${{ secrets.DISCORD_WEBHOOK }}
         title: "New deployment live! ✅"
-        description: "Test here: https://hung.thedev.id"
+        description: "All systems go!"
   tag_release:
     needs: [deploy]
     if: ${{ github.event_name == 'push'}}
