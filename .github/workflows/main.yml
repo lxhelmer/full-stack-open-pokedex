@@ -1,3 +1,4 @@
+name: Healthcheck pipeline
 on:
   schedule:
     - cron: '0 4 * * *'
