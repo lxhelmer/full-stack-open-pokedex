@@ -24,7 +24,7 @@ jobs:
       - name: Check style        
         run: npm run eslint
       - name: Build
-        run: npm run buil
+        run: npm run build
       - name: Test
         run: npm run test
       - name: Notification Failure
