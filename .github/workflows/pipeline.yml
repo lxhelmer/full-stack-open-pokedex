@@ -27,16 +27,12 @@ jobs:
         run: npm run build
       - name: Test
         run: npm run test
-      - name: Discord notify test failure
-        uses: stegzilla/discord-notify@v2
-        if: ${{ failure() }}
+      - name: Send status to Discord
+        uses: nebularg/actions-discord-webhook@v1
         with:
-          webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
-          title: The latest build failed! :(
-          message: "${{ toJson(github.event.commits.*.url) }}"
-          include_image: true
-          avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
-          username: GitHub PR Notifier
+          webhook_url: ${{ secrets.discord_webhook_url }} # required
+          status: ${{ job.status }} # optional, this is the default
+        if: failure() # or failure() or success()
   e2e-test:
       timeout-minutes: 60
       runs-on: ubuntu-latest
@@ -66,16 +62,12 @@ jobs:
     - name: Trigger deployment
       if: ${{ env.SKIP == false }}
       run: curl https://api.render.com/deploy/srv-${{ secrets.SRV_ID }}?key=${{ secrets.API_KEY }}
-    - name: Send Discord notification
-      uses: stegzilla/discord-notify@v2
-      if: ${{ success() }}
+    - name: Send status to Discord
+      uses: nebularg/actions-discord-webhook@v1
       with:
-        webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
-        title: New Deployment live!
-        message: "${{ toJson(github.event.commits.*.url) }}"
-        include_image: true
-        avatar_url: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
-        username: GitHub PR Notifier
+        webhook_url: ${{ secrets.discord_webhook_url }} # required
+        status: ${{ job.status }} # optional, this is the default
+      if: success() # or failure() or success()
   tag_release:
     needs: [deploy]
     if: ${{ github.event_name == 'push'}}
