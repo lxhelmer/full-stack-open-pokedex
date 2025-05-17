@@ -27,12 +27,13 @@ jobs:
         run: npm run build
       - name: Test
         run: npm run test
-      - name: Send status to Discord
-        uses: nebularg/actions-discord-webhook@v1
+      - name: Notification Failure
+        if: failure()
+        uses: hunghg255/action-notifications@master
         with:
-          webhook_url: ${{ secrets.DISCORD_WEBHOOK }} # required
-          status: "Build failed :( ❌" # optional, this is the default
-        if: failure() # or failure() or success()
+          discord_webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          title: "Latest build failed :( ❌"
+          description: "Build failed, something needs fixing!"
   e2e-test:
       timeout-minutes: 60
       runs-on: ubuntu-latest
@@ -62,12 +63,13 @@ jobs:
     - name: Trigger deployment
       if: ${{ env.SKIP == false }}
       run: curl https://api.render.com/deploy/srv-${{ secrets.SRV_ID }}?key=${{ secrets.API_KEY }}
-    - name: Send status to Discord
-      uses: nebularg/actions-discord-webhook@v1
+    - name: Notification Success
+      uses: hunghg255/action-notifications@master
+      if: success()
       with:
-        webhook_url: ${{ secrets.DISCORD_WEBHOOK }} # required
-        status: "New deployment live! ✅"  # optional, this is the default
-      if: success() # or failure() or success()
+        discord_webhook: ${{ secrets.DISCORD_WEBHOOK }}
+        title: "New deployment live! ✅"
+        description: "Test here: https://hung.thedev.id"
   tag_release:
     needs: [deploy]
     if: ${{ github.event_name == 'push'}}
