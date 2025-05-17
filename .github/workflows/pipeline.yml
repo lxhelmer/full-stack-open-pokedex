@@ -30,7 +30,7 @@ jobs:
       - name: Send status to Discord
         uses: nebularg/actions-discord-webhook@v1
         with:
-          webhook_url: ${{ secrets.discord_webhook_url }} # required
+          webhook_url: ${{ secrets.DISCORD_WEBHOOK }} # required
           status: ${{ job.status }} # optional, this is the default
         if: failure() # or failure() or success()
   e2e-test:
@@ -65,7 +65,7 @@ jobs:
     - name: Send status to Discord
       uses: nebularg/actions-discord-webhook@v1
       with:
-        webhook_url: ${{ secrets.discord_webhook_url }} # required
+        webhook_url: ${{ secrets.DISCORD_WEBHOOK }} # required
         status: ${{ job.status }} # optional, this is the default
       if: success() # or failure() or success()
   tag_release:
