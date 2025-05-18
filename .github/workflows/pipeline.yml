@@ -62,7 +62,10 @@ jobs:
     steps:
     - name: Trigger deployment
       if: ${{ env.SKIP == false }}
-      run: curl https://api.render.com/deploy/srv-${{ secrets.SRV_ID }}?key=${{ secrets.API_KEY }}
+      env:
+        deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+      run: |
+          curl "$deploy_url"
     - name: Notification Success
       uses: hunghg255/action-notifications@master
       if: success()
