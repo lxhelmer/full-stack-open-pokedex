@@ -61,7 +61,7 @@ jobs:
     if: ${{ needs.checks.result == 'success' && needs.e2e-test.result == 'success' && github.event_name == 'push'}}
     steps:
     - name: Trigger deployment
-      if: ${{ env.SKIP == false }}
+      if: ${{ env.SKIP == "false" }}
       env:
         deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
       run: |
