@@ -1,4 +1,4 @@
-ython based ci/cd pipeline
+python based ci/cd pipeline
 
 In python there are few very popular tools and practices for project management. Dependencies are often handled by plain python virtual environments or proj
 ect dependency management systems like poetry. These are the go-to way of adding and managing that dependencies that the project uses are installed and how 
